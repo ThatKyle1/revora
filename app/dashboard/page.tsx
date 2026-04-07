@@ -23,6 +23,14 @@ export default async function DashboardPage() {
             </a>
           </div>
         </div>
+        <div className="mb-4">
+          <a
+            href="/dashboard/new"
+            className="bg-black text-white rounded px-4 py-2 text-sm hover:bg-gray-800"
+          >
+            New Listing
+          </a>
+        </div>
         <div className="border rounded-lg p-12 text-center text-gray-400">
           No listings yet. Create your first listing to get started.
         </div>
