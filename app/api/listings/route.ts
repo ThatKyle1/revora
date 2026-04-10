@@ -16,6 +16,9 @@ export async function POST(req: NextRequest) {
   const size = formData.get("size") as string;
   const condition = formData.get("condition") as string;
   const notes = formData.get("notes") as string;
+  const title = formData.get("title") as string;
+  const description = formData.get("description") as string;
+  const tags = formData.get("tags") as string;
   const purchasePrice = parseFloat(formData.get("purchasePrice") as string);
   const image = formData.get("image") as File;
 
@@ -38,6 +41,9 @@ export async function POST(req: NextRequest) {
       size,
       condition,
       notes,
+      title,
+      description,
+      tags,
       purchasePrice,
       imageUrl,
     },

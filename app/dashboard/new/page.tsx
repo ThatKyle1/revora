@@ -6,6 +6,35 @@ import { useRouter } from "next/navigation";
 export default function NewListingPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [generating, setGenerating] = useState(false);
+  const [brand, setBrand] = useState("");
+  const [size, setSize] = useState("");
+  const [condition, setCondition] = useState("");
+  const [notes, setNotes] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [tags, setTags] = useState("");
+
+  async function handleGenerate() {
+    setGenerating(true);
+
+    const res = await fetch("/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ brand, size, condition, notes }),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      setTitle(data.title ?? "");
+      setDescription(data.description ?? "");
+      setTags(data.tags ?? "");
+    } else {
+      alert("Generation failed. Please try again.");
+    }
+
+    setGenerating(false);
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -36,6 +65,8 @@ export default function NewListingPage() {
             <input
               name="brand"
               type="text"
+              value={brand}
+              onChange={(e) => setBrand(e.target.value)}
               className="w-full border rounded px-3 py-2"
               placeholder="e.g. Nike, Zara"
             />
@@ -45,13 +76,20 @@ export default function NewListingPage() {
             <input
               name="size"
               type="text"
+              value={size}
+              onChange={(e) => setSize(e.target.value)}
               className="w-full border rounded px-3 py-2"
               placeholder="e.g. M, 32, 10"
             />
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">Condition</label>
-            <select name="condition" className="w-full border rounded px-3 py-2">
+            <select
+              name="condition"
+              value={condition}
+              onChange={(e) => setCondition(e.target.value)}
+              className="w-full border rounded px-3 py-2"
+            >
               <option value="">Select condition</option>
               <option value="new_with_tags">New with tags</option>
               <option value="like_new">Like new</option>
@@ -63,11 +101,55 @@ export default function NewListingPage() {
             <label className="block text-sm font-medium mb-1">Notes</label>
             <textarea
               name="notes"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
               className="w-full border rounded px-3 py-2"
               rows={3}
               placeholder="Any details about the item..."
             />
           </div>
+          <button
+            type="button"
+            onClick={handleGenerate}
+            disabled={generating}
+            className="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700 disabled:opacity-50"
+          >
+            {generating ? "Generating..." : "Generate with AI"}
+          </button>
+          {title && (
+            <div className="flex flex-col gap-4 border rounded-lg p-4 bg-gray-50">
+              <div>
+                <label className="block text-sm font-medium mb-1">Title</label>
+                <input
+                  name="title"
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="w-full border rounded px-3 py-2 bg-white"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Description</label>
+                <textarea
+                  name="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className="w-full border rounded px-3 py-2 bg-white"
+                  rows={3}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Tags</label>
+                <input
+                  name="tags"
+                  type="text"
+                  value={tags}
+                  onChange={(e) => setTags(e.target.value)}
+                  className="w-full border rounded px-3 py-2 bg-white"
+                />
+              </div>
+            </div>
+          )}
           <div>
             <label className="block text-sm font-medium mb-1">
               Purchase Price ($)
