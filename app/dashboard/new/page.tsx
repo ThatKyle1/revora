@@ -117,7 +117,7 @@ export default function NewListingPage() {
             {generating ? "Generating..." : "Generate with AI"}
           </button>
           {title && (
-            <div className="flex flex-col gap-4 border rounded-lg p-4 bg-gray-50">
+            <div className="flex flex-col gap-4 border rounded-lg p-4 bg-gray-50 text-black">
               <div>
                 <label className="block text-sm font-medium mb-1">Title</label>
                 <input
