@@ -35,6 +35,17 @@ export async function POST(req: NextRequest) {
     imageUrl = uploaded.secure_url;
   }
 
+  let estimatedProfit: number | undefined;
+
+  if (!isNaN(purchasePrice)) {
+    const estimatedSalePrice = purchasePrice * 2.5;
+    const platformFee = estimatedSalePrice * 0.08;
+    const shippingCost = 5;
+    estimatedProfit = parseFloat(
+      (estimatedSalePrice - platformFee - shippingCost - purchasePrice).toFixed(2)
+    );
+  }
+
   const listing = await prisma.listing.create({
     data: {
       brand,
@@ -45,6 +56,7 @@ export async function POST(req: NextRequest) {
       description,
       tags,
       purchasePrice,
+      estimatedProfit,
       imageUrl,
     },
   });

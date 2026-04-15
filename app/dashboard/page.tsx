@@ -55,13 +55,18 @@ export default async function DashboardPage() {
                   />
                 )}
                 <div>
-                  <p className="font-medium">{listing.brand ?? "No brand"}</p>
+                  <p className="font-medium">{listing.title ?? listing.brand ?? "No brand"}</p>
                   <p className="text-sm text-gray-500">
                     {listing.size} · {listing.condition}
                   </p>
                   {listing.purchasePrice && (
                     <p className="text-sm text-gray-500">
                       Paid: ${listing.purchasePrice}
+                    </p>
+                  )}
+                  {listing.estimatedProfit !== null && (
+                    <p className="text-sm font-medium text-green-600">
+                      Est. profit: ${listing.estimatedProfit}
                     </p>
                   )}
                 </div>
