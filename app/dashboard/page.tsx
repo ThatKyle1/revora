@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Image from "next/image";
+import DeleteButton from "./DeleteButton";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -69,6 +70,7 @@ export default async function DashboardPage() {
                       Est. profit: ${listing.estimatedProfit}
                     </p>
                   )}
+                  <DeleteButton id={listing.id} />
                 </div>
               </div>
             ))}
