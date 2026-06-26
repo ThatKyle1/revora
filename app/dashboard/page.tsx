@@ -39,8 +39,16 @@ export default async function DashboardPage() {
           </a>
         </div>
         {listings.length === 0 ? (
-          <div className="border rounded-lg p-12 text-center text-gray-400">
-            No listings yet. Create your first listing to get started.
+          <div className="border rounded-lg p-12 text-center">
+            <p className="text-gray-400 mb-4">
+              No listings yet. Create your first listing to get started.
+            </p>
+            <a
+              href="/dashboard/new"
+              className="bg-black text-white rounded px-4 py-2 text-sm hover:bg-gray-800"
+            >
+              Create your first listing
+            </a>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
