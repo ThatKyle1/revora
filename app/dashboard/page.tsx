@@ -16,36 +16,48 @@ export default async function DashboardPage() {
   });
 
   return (
-    <main className="min-h-screen p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold">Revora</h1>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">{session.user?.name}</span>
-            <a
-              href="/api/auth/signout"
-              className="text-sm text-red-500 hover:underline"
-            >
-              Sign out
-            </a>
-          </div>
-        </div>
-        <div className="mb-6">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Nav */}
+      <nav className="bg-white border-b border-gray-100 px-8 py-4 flex items-center justify-between">
+        <span className="text-base font-bold tracking-tight">Revora</span>
+        <div className="flex items-center gap-5">
+          <span className="text-sm text-gray-500">{session.user?.name}</span>
           <a
-            href="/dashboard/new"
-            className="bg-black text-white rounded px-4 py-2 text-sm hover:bg-gray-800"
+            href="/api/auth/signout"
+            className="text-sm text-gray-400 hover:text-gray-700 transition-colors"
           >
-            New Listing
+            Sign out
           </a>
         </div>
+      </nav>
+
+      {/* Content */}
+      <main className="flex-1 max-w-5xl w-full mx-auto px-8 py-10">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">My Listings</h1>
+            <p className="text-sm text-gray-400 mt-0.5">
+              {listings.length} {listings.length === 1 ? "item" : "items"}
+            </p>
+          </div>
+          <a
+            href="/dashboard/new"
+            className="bg-black text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors"
+          >
+            + New listing
+          </a>
+        </div>
+
         {listings.length === 0 ? (
-          <div className="border rounded-lg p-12 text-center">
-            <p className="text-gray-400 mb-4">
-              No listings yet. Create your first listing to get started.
+          <div className="bg-white border border-gray-200 rounded-2xl p-16 text-center">
+            <p className="text-2xl mb-2">📦</p>
+            <p className="font-semibold text-gray-700 mb-1">No listings yet</p>
+            <p className="text-sm text-gray-400 mb-6">
+              Create your first listing and let AI do the writing.
             </p>
             <a
               href="/dashboard/new"
-              className="bg-black text-white rounded px-4 py-2 text-sm hover:bg-gray-800"
+              className="bg-black text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-gray-800 transition-colors"
             >
               Create your first listing
             </a>
@@ -53,38 +65,49 @@ export default async function DashboardPage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {listings.map((listing) => (
-              <div key={listing.id} className="border rounded-lg p-4 flex gap-4">
-                {listing.imageUrl && (
+              <div
+                key={listing.id}
+                className="bg-white border border-gray-200 rounded-2xl p-5 flex gap-4 hover:shadow-sm transition-shadow"
+              >
+                {listing.imageUrl ? (
                   <Image
                     src={listing.imageUrl}
                     alt={listing.brand ?? "listing"}
-                    width={80}
-                    height={80}
-                    className="rounded object-cover w-20 h-20 shrink-0"
+                    width={96}
+                    height={96}
+                    className="rounded-xl object-cover w-24 h-24 shrink-0"
                   />
+                ) : (
+                  <div className="w-24 h-24 shrink-0 rounded-xl bg-gray-100 flex items-center justify-center text-gray-300 text-2xl">
+                    📷
+                  </div>
                 )}
-                <div>
-                  <p className="font-medium">{listing.title ?? listing.brand ?? "No brand"}</p>
-                  <p className="text-sm text-gray-500">
-                    {listing.size} · {listing.condition}
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-gray-900 truncate">
+                    {listing.title ?? listing.brand ?? "Untitled"}
+                  </p>
+                  <p className="text-sm text-gray-400 mt-0.5">
+                    {[listing.size, listing.condition].filter(Boolean).join(" · ")}
                   </p>
                   {listing.purchasePrice && (
-                    <p className="text-sm text-gray-500">
-                      Paid: ${listing.purchasePrice}
+                    <p className="text-sm text-gray-400 mt-0.5">
+                      Paid ${listing.purchasePrice}
                     </p>
                   )}
                   {listing.estimatedProfit !== null && (
-                    <p className="text-sm font-medium text-green-600">
-                      Est. profit: ${listing.estimatedProfit}
+                    <p className="text-sm font-semibold text-emerald-600 mt-1">
+                      Est. profit ${listing.estimatedProfit}
                     </p>
                   )}
-                  <DeleteButton id={listing.id} />
+                  <div className="mt-3">
+                    <DeleteButton id={listing.id} />
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         )}
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }

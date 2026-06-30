@@ -15,7 +15,7 @@ export default function DeleteButton({ id }: { id: string }) {
   return (
     <button
       onClick={handleDelete}
-      className="text-xs text-red-500 hover:underline mt-1"
+      className="text-xs text-gray-400 hover:text-red-500 transition-colors"
     >
       Delete
     </button>
