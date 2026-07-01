@@ -19,7 +19,7 @@ export default async function DashboardPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Nav */}
       <nav className="bg-white border-b border-gray-100 px-8 py-4 flex items-center justify-between">
-        <span className="text-base font-bold tracking-tight">Revora</span>
+        <span className="text-base font-bold tracking-tight text-gray-900">Revora</span>
         <div className="flex items-center gap-5">
           <span className="text-sm text-gray-500">{session.user?.name}</span>
           <a
@@ -50,7 +50,21 @@ export default async function DashboardPage() {
 
         {listings.length === 0 ? (
           <div className="bg-white border border-gray-200 rounded-2xl p-16 text-center">
-            <p className="text-2xl mb-2">📦</p>
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="mx-auto mb-3 text-gray-300"
+              aria-hidden="true"
+            >
+              <path d="M12 2.5l8 4.2v10.6l-8 4.2-8-4.2V6.7l8-4.2Z" />
+              <path d="M4 6.7l8 4.2 8-4.2M12 10.9V21.5" />
+            </svg>
             <p className="font-semibold text-gray-700 mb-1">No listings yet</p>
             <p className="text-sm text-gray-400 mb-6">
               Create your first listing and let AI do the writing.
@@ -78,8 +92,12 @@ export default async function DashboardPage() {
                     className="rounded-xl object-cover w-24 h-24 shrink-0"
                   />
                 ) : (
-                  <div className="w-24 h-24 shrink-0 rounded-xl bg-gray-100 flex items-center justify-center text-gray-300 text-2xl">
-                    📷
+                  <div className="w-24 h-24 shrink-0 rounded-xl bg-gray-100 flex items-center justify-center text-gray-400">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5" />
+                      <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" />
+                      <path d="M3 16l5-5 4 4 3-3 6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
                   </div>
                 )}
                 <div className="flex-1 min-w-0">

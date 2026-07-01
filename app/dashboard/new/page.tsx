@@ -73,7 +73,7 @@ export default function NewListingPage() {
           ← Back
         </a>
         <span className="w-px h-4 bg-gray-200 shrink-0" aria-hidden="true" />
-        <span className="text-base font-bold tracking-tight">Revora</span>
+        <span className="text-base font-bold tracking-tight text-gray-900">Revora</span>
       </nav>
 
       <main className="flex-1 max-w-xl w-full mx-auto px-6 py-10">
