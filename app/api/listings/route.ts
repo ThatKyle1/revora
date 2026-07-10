@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   const session = await auth();
 
-  if (!session) {
+  if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
   let estimatedProfit: number | undefined;
 
   if (!isNaN(purchasePrice)) {
-    const estimatedSalePrice = purchasePrice * 2.5;
+    const estimatedSalePrice = purchasePrice * 2.5; // *** this is hard coded FIX LATER
     const platformFee = estimatedSalePrice * 0.08;
     const shippingCost = 5;
     estimatedProfit = parseFloat(
@@ -48,6 +48,7 @@ export async function POST(req: NextRequest) {
 
   const listing = await prisma.listing.create({
     data: {
+      userId: session.user.id,
       brand,
       size,
       condition,

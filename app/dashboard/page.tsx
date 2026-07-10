@@ -1,3 +1,6 @@
+
+/* Dash board page, Where you can view listings */
+
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
@@ -6,18 +9,22 @@ import DeleteButton from "./DeleteButton";
 
 export default async function DashboardPage() {
   const session = await auth();
-
+  //make sure logged in first
   if (!session) {
     redirect("/api/auth/signin");
   }
 
+  // getting listings from postgresSQL database, using prisma ORM (object-reltional mapping)
+  // scoped to the signed-in user — identity comes from the session, never the client
   const listings = await prisma.listing.findMany({
+    where: { userId: session.user.id },
     orderBy: { createdAt: "desc" },
   });
 
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Nav */}
+      {/* Nav BAR at top*/}
       <nav className="bg-white border-b border-gray-100 px-8 py-4 flex items-center justify-between">
         <span className="text-base font-bold tracking-tight text-gray-900">Revora</span>
         <div className="flex items-center gap-5">
@@ -31,7 +38,7 @@ export default async function DashboardPage() {
         </div>
       </nav>
 
-      {/* Content */}
+      {/* Main center box*/}
       <main className="flex-1 max-w-5xl w-full mx-auto px-8 py-10">
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -41,7 +48,7 @@ export default async function DashboardPage() {
             </p>
           </div>
           <a
-            href="/dashboard/new"
+            href="/dashboard/new" /*href to new page where create new listing */
             className="bg-black text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors"
           >
             + New listing
@@ -69,14 +76,14 @@ export default async function DashboardPage() {
             <p className="text-sm text-gray-400 mb-6">
               Create your first listing and let AI do the writing.
             </p>
-            <a
-              href="/dashboard/new"
+            <a 
+              href="/dashboard/new" 
               className="bg-black text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-gray-800 transition-colors"
             >
               Create your first listing
             </a>
           </div>
-        ) : (
+        ) : ( /*if listing box is not empty and previous listing's were uploaded */
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {listings.map((listing) => (
               <div
