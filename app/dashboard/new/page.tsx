@@ -48,6 +48,15 @@ export default function NewListingPage() {
 
     const formData = new FormData(e.currentTarget);
 
+    // Vercel rejects bodies over ~4.5MB before the server runs, so oversized
+    // photos can only be caught here in the browser
+    const image = formData.get("image") as File | null;
+    if (image && image.size > 4 * 1024 * 1024) {
+      setSubmitError("Photo is too large. Please choose an image under 4MB.");
+      setLoading(false);
+      return;
+    }
+
     const res = await fetch("/api/listings", {
       method: "POST",
       body: formData,
