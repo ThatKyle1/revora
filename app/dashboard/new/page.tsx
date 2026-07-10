@@ -27,19 +27,21 @@ export default function NewListingPage() {
       body: JSON.stringify({ brand, size, condition, notes }),
     });
 
-    if (res.ok) {
+    if (res.ok) { // if call went by fine set
       const data = await res.json();
       setTitle(data.title ?? "");
       setDescription(data.description ?? "");
       setTags(data.tags ?? "");
+    } else if (res.status === 401) { // if not raise the error that matches what went wrong
+      setGenerateError("Your session has expired. Please sign in again.");
     } else {
-      setGenerateError("Generation failed. Check your item details and try again.");
+      setGenerateError("The AI couldn't generate a listing right now. Please try again.");
     }
 
     setGenerating(false);
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) { // getting all form data inputed
     e.preventDefault();
     setLoading(true);
     setSubmitError(null);
@@ -53,6 +55,9 @@ export default function NewListingPage() {
 
     if (res.ok) {
       router.push("/dashboard");
+    } else if (res.status === 401) {
+      setSubmitError("Your session has expired. Please sign in again.");
+      setLoading(false);
     } else {
       setSubmitError("Something went wrong saving your listing. Please try again.");
       setLoading(false);

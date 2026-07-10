@@ -25,16 +25,21 @@ Respond with JSON in this exact format, no other text:
   "description": "a 2-3 sentence description highlighting key details",
   "tags": "comma separated list of 5 relevant search tags"
 }`;
+  // client is claude
+  try {
+    const response = await client.messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 512,
+      messages: [{ role: "user", content: prompt }],
+    });
 
-  const response = await client.messages.create({
-    model: "claude-haiku-4-5-20251001",
-    max_tokens: 512,
-    messages: [{ role: "user", content: prompt }],
-  });
+    const raw = response.content[0].type === "text" ? response.content[0].text : "";
+    const text = raw.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim(); // get rid of extra json word that claude automatically gives back
+    const result = JSON.parse(text);
 
-  const raw = response.content[0].type === "text" ? response.content[0].text : "";
-  const text = raw.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
-  const result = JSON.parse(text);
-
-  return NextResponse.json(result);
+    return NextResponse.json(result);
+  } catch {
+    // 502: our upstream (Claude) failed or returned unparseable output
+    return NextResponse.json({ error: "Generation failed" }, { status: 502 });
+  }
 }
