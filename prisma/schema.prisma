@@ -16,8 +16,9 @@ model Listing {
   size            String?
   condition       String?
   notes           String?
-  purchasePrice   Float?
-  estimatedProfit Float?
+  purchasePrice      Float?
+  estimatedSalePrice Float?
+  estimatedProfit    Float?
   imageUrl        String?
   createdAt       DateTime @default(now())
 
